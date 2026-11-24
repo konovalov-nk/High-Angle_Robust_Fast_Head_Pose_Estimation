@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HFHPE Explained — Zundamon &amp; Shiko Metan</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="stage" class="stage">
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">HFHPE</div>
+    <div class="header-center" id="headerSub">Zundamon &amp; Shiko Metan explain</div>
+    <div class="header-right" id="headerSection">01 What can it do?</div>
+  </header>
+
+  <!-- Main -->
+  <main class="main">
+    <aside class="avatar" id="avatarLeft"></aside>
+    <section class="content" id="content"></section>
+    <aside class="avatar" id="avatarRight"></aside>
+  </main>
+
+  <!-- Caption bar -->
+  <div class="caption-bar" id="captionBar" data-speaker="">
+    <span class="caption-text" id="captionText"></span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span id="footerVoices">English voices: Kokoro af_bella (+4 st) / bf_emma (native pitch)</span>
+    <span id="footerModels">Sakamoto Ahiru-style Live2D models</span>
+  </footer>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button id="btnPlay" class="btn" title="play/pause">▶</button>
+    <button id="btnPrev" class="btn" title="previous slide">⏮</button>
+    <button id="btnNext" class="btn" title="next slide">⏭</button>
+    <div class="timeline" id="timeline">
+      <div class="timeline-fill" id="timelineFill"></div>
+    </div>
+    <span class="time-label" id="timeLabel">0:00 / 9:29</span>
+    <div class="speed-group">
+      <button class="seg-btn" data-speed="0.5">.5×</button>
+      <button class="seg-btn" data-speed="1">1×</button>
+      <button class="seg-btn" data-speed="2">2×</button>
+    </div>
+    <div class="lang-group" id="dubGroup" title="Dub audio language">
+      <span class="group-label">DUB</span>
+      <button class="seg-btn active" data-lang="en">EN</button>
+      <button class="seg-btn" data-lang="jp">JP</button>
+    </div>
+    <div class="lang-group" id="subGroup" title="Subtitle language (synced to the dub)">
+      <span class="group-label">SUBS</span>
+      <button class="seg-btn active" data-sub="en">EN</button>
+      <button class="seg-btn" data-sub="jp">JP</button>
+      <button class="seg-btn" data-sub="off">OFF</button>
+    </div>
+    <button id="btnSubs" class="btn" title="toggle subtitles">CC</button>
+  </div>
+
+  <!-- Audio -->
+  <audio id="audioEn" src="audio/en.m4a" preload="auto"></audio>
+  <audio id="audioJp" src="audio/jp.m4a" preload="auto"></audio>
+</div>
+<script src="data/slides.js"></script>
+<script src="data/captions.js"></script>
+<script src="js/diagrams.js"></script>
+<script src="js/avatar-zundamon.js"></script>
+<script src="js/avatar-metan.js"></script>
+<script src="js/avatars.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
