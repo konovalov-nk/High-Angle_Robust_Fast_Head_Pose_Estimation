@@ -201,3 +201,8 @@ body{display:flex;align-items:center;justify-content:center}
   transition:opacity .25s ease,filter .25s ease}
 .avatar.speaking .avatar-video{opacity:1}
 .avatar:not(.speaking) .avatar-video{opacity:.85;filter:saturate(.92)}
+
+/* ---- volume ---- */
+.volume-group{display:flex;align-items:center;gap:clamp(4px,.5vw,8px)}
+.volume-slider{width:clamp(56px,5.5vw,86px);height:clamp(3px,.5vh,5px);accent-color:var(--cyan);cursor:pointer;background:transparent}
+#btnMute{min-width:clamp(30px,3.4vw,38px);font-size:clamp(11px,1.15vw,14px)}

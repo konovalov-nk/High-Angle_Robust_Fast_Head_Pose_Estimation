@@ -5,7 +5,7 @@
 const TOTAL = TOTAL_DURATION || 569.51;
 const $ = id => document.getElementById(id);
 const audioEn = $('audioEn'), audioJp = $('audioJp');
-const state = { dubLang: 'en', subLang: 'en', lastSubLang: 'en', speed: 1, playing: false, time: 0, slideIdx: -1, footageSlide: null, endFired: false, speaker: null };
+const state = { dubLang: 'en', subLang: 'en', lastSubLang: 'en', speed: 1, playing: false, time: 0, slideIdx: -1, footageSlide: null, endFired: false, speaker: null, volume: 1, muted: false };
 
 // ---------- audio / webaudio ----------
 let mouthLevel = 0;
@@ -59,6 +59,46 @@ function applyMouth() {
   const z = document.getElementById('zMouth'), m = document.getElementById('mMouth');
   if (z) z.setAttribute('transform', `scale(1 ${s})`);
   if (m) m.setAttribute('transform', `scale(1 ${s})`);
+}
+
+// ---------- volume ----------
+function loadVolumePref() {
+  try {
+    const raw = localStorage.getItem('hfhpe.volume');
+    if (raw !== null) {
+      const v = parseFloat(raw);
+      if (isFinite(v)) state.volume = Math.max(0, Math.min(1, v));
+    }
+    state.muted = localStorage.getItem('hfhpe.muted') === '1';
+  } catch (e) {}
+}
+function saveVolumePref() {
+  try {
+    localStorage.setItem('hfhpe.volume', String(state.volume));
+    localStorage.setItem('hfhpe.muted', state.muted ? '1' : '0');
+  } catch (e) {}
+}
+function applyVolume() {
+  const v = state.muted ? 0 : state.volume;
+  audioEn.volume = v; audioJp.volume = v;
+  const btn = $('btnMute');
+  if (btn) {
+    btn.textContent = (state.muted || state.volume === 0) ? '🔇' : '🔊';
+    btn.classList.toggle('on', !(state.muted || state.volume === 0));
+  }
+  const slider = $('volume');
+  if (slider) slider.value = String(state.volume);
+  document.body.dataset.volume = String(v);
+  document.body.dataset.muted = state.muted ? '1' : '0';
+}
+function setVolume(v) {
+  state.volume = Math.max(0, Math.min(1, v));
+  if (state.volume > 0) state.muted = false;
+  applyVolume(); saveVolumePref();
+}
+function toggleMute() {
+  state.muted = !state.muted;
+  applyVolume(); saveVolumePref();
 }
 
 function setSpeed(v) {
@@ -457,6 +497,10 @@ document.addEventListener('DOMContentLoaded', () => {
   setSpeed(1);
   $('btnPlay').addEventListener('click', togglePlay);
   $('btnSubs').addEventListener('click', toggleSubs);
+  $('btnMute').addEventListener('click', toggleMute);
+  $('volume').addEventListener('input', e => setVolume(parseFloat(e.target.value)));
+  loadVolumePref();
+  applyVolume();
   $('btnPrev').addEventListener('click', () => { const i = currentSlideAt(state.time); gotoSlide(Math.max(0, (state.time - SLIDES[i].start > 1 ? i : i - 1))); });
   $('btnNext').addEventListener('click', () => { const i = currentSlideAt(state.time); gotoSlide(Math.min(SLIDES.length - 1, i + 1)); });
   document.querySelectorAll('.speed-group .seg-btn').forEach(b => b.addEventListener('click', () => { setSpeed(parseFloat(b.dataset.speed)); }));
@@ -492,6 +536,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (location.hash === '#smoke-end') setTimeout(() => { seekTo(566); }, 250);
   if (location.hash === '#smoke-darkness') setTimeout(() => { seekTo(532); }, 250);
   if (location.hash === '#smoke-jpd-subs-jp') setTimeout(() => { seekTo(150); setDub('jp'); setSub('jp'); }, 250);
+  if (location.hash === '#smoke-mute') setTimeout(() => { if (!state.muted) toggleMute(); }, 250);
+  const mv = location.hash.match(/^#smoke-vol=([0-9.]+)$/);
+  if (mv) setTimeout(() => setVolume(parseFloat(mv[1])), 250);
   if (location.hash === '#smoke-kappa') setTimeout(() => { seekTo(200); }, 250);
   const m = location.hash.match(/^#smoke-seek=([0-9.]+)$/);
   if (m) setTimeout(() => { seekTo(parseFloat(m[1])); }, 250);
